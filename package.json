@@ -1,0 +1,31 @@
+{
+  "name": "authentication_authorazation_clean-arch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run tsc -- --noEmit && jest",
+    "test-coverage": "npm run tsc -- --noEmit && jest --coverage",
+    "tsc": "tsc",
+    "dev": "nodemon src/infra/api/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RuanCrysthian/authentication_authorazation_clean-arch.git"
+  },
+  "author": "Ruan Ferraz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RuanCrysthian/authentication_authorazation_clean-arch/issues"
+  },
+  "homepage": "https://github.com/RuanCrysthian/authentication_authorazation_clean-arch#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@types/jest": "^29.5.13",
+    "express": "^4.21.1",
+    "jest": "^29.7.0"
+  }
+}
