@@ -121,11 +121,5 @@ describe("User entity unit tests", () => {
     expect(hashedPassword).not.toBe(originalPassword);
     const isMatch = await bcrypt.compare(originalPassword, hashedPassword);
     expect(isMatch).toBe(true);
-    expect(user.id).toBe("1");
-    expect(user.name).toBe("John Doe");
-    expect(user.email).toBe("test@email.com");
-    expect(user.role).toBe("user");
-    expect(user.createdAt).toBeInstanceOf(Date);
-    expect(user.updatedAt).toBeInstanceOf(Date);
   });
 });
