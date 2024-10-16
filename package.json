@@ -20,17 +20,29 @@
   },
   "homepage": "https://github.com/RuanCrysthian/authentication_authorazation_clean-arch#readme",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/uuid": "^10.0.0",
     "typescript": "^5.6.3"
   },
   "dependencies": {
     "@types/jest": "^29.5.13",
+    "@types/nodemon": "^1.19.6",
+    "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "jest": "^29.7.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.3",
+    "nodemon": "^3.1.7",
+    "sequelize": "^6.37.4",
+    "sequelize-typescript": "^2.1.6",
+    "sqlite3": "^5.1.7",
     "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
     "uuid": "^10.0.0"
   }
 }
