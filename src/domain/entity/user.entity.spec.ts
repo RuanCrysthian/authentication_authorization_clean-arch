@@ -99,9 +99,6 @@ describe("User entity unit tests", () => {
       );
     }).toThrow("User role is required");
   });
-});
-describe("User entity unit tests", () => {
-  // Existing tests...
 
   it("should hash the user password correctly", async () => {
     const user = new User(
@@ -121,5 +118,20 @@ describe("User entity unit tests", () => {
     expect(hashedPassword).not.toBe(originalPassword);
     const isMatch = await bcrypt.compare(originalPassword, hashedPassword);
     expect(isMatch).toBe(true);
+  });
+
+  it("should throw error when change for invalid role", () => {
+    const user = new User(
+      "1",
+      "John Doe",
+      "test@email.com",
+      "@QAZ123qaz",
+      "user",
+      new Date(),
+      new Date()
+    );
+    expect(() => {
+      user.changeRole("invalid");
+    }).toThrow("Invalid role");
   });
 });
