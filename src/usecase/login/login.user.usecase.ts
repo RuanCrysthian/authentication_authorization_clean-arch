@@ -15,9 +15,6 @@ export default class LoginUseCase {
 
   async execute(input: InputLoginUserDto): Promise<OutputLoginUserDto> {
     const user = await this.userRepository.findByEmail(input.email);
-    if (!user) {
-      throw new Error("User not found");
-    }
     const isPasswordValid = await this.verifyPassword(
       input.password,
       user.password
@@ -25,9 +22,13 @@ export default class LoginUseCase {
     if (!isPasswordValid) {
       throw new Error("Invalid password");
     }
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "8h",
-    });
+    const token = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "8h",
+      }
+    );
     return { token: token };
   }
 
