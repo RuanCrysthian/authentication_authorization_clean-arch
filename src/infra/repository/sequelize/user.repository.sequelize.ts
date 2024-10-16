@@ -19,7 +19,6 @@ export default class UserRepository implements UserRepositoryInterface {
       if (error instanceof UniqueConstraintError) {
         throw new Error("Email already exists");
       }
-      throw error;
     }
   }
 
