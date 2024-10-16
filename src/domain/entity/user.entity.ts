@@ -82,6 +82,24 @@ export default class User {
     return this._updatedAt;
   }
 
+  changeName(name: string): void {
+    this._name = name;
+    this.validate();
+  }
+
+  changeEmail(email: string): void {
+    this._email = email;
+    this.validate();
+  }
+
+  changeRole(role: string): void {
+    if (role.length === 0 || (role !== "user" && role !== "admin")) {
+      throw new Error("Invalid role");
+    }
+    this._role = role;
+    this.validate();
+  }
+
   async hashPassword(): Promise<void> {
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
