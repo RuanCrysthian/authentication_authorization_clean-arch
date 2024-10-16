@@ -1,0 +1,43 @@
+services:
+  app_authentication_authorization:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app_authentication_authorization
+    ports:
+      - "4000:3000"
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=authentication_authorization
+    networks:
+      - authentication_authorization
+    depends_on:
+      - db
+
+  db:
+    image:
+      mysql:latest
+    container_name: db_authentication_authorization
+    ports:
+      - "3366:3306"
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=authentication_authorization
+    networks:
+      - authentication_authorization
+
+volumes:
+  db:
+    driver: local
+
+networks:
+  authentication_authorization:
+    name: authentication_authorization
