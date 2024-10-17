@@ -1,8 +1,16 @@
+jest.mock("nodemailer");
+
+import nodemailer from "nodemailer";
 import { Sequelize } from "sequelize-typescript";
 import EventDispatcher from "../../domain/event/event.dispatcher";
 import UserModel from "../../infra/repository/sequelize/user.model";
 import UserRepository from "../../infra/repository/sequelize/user.repository.sequelize";
 import SaveUserUseCase from "./save.user.usecase";
+
+const sendMailMock = jest.fn();
+nodemailer.createTransport = jest.fn().mockReturnValue({
+  sendMail: sendMailMock,
+});
 
 describe("Save user use case test", () => {
   let sequelize: Sequelize;
@@ -21,11 +29,13 @@ describe("Save user use case test", () => {
 
   afterEach(async () => {
     await sequelize.close();
+    jest.clearAllMocks();
   });
 
-  it("should create a new user", async () => {
+  it("should create a new user and send email", async () => {
     const userRepository = new UserRepository();
     const eventDispatcher = new EventDispatcher();
+
     const usecase = new SaveUserUseCase(userRepository, eventDispatcher);
     const input = {
       name: "John Doe",
@@ -48,5 +58,7 @@ describe("Save user use case test", () => {
       createdAt: userModel.createdAt,
       updatedAt: userModel.updatedAt,
     });
+
+    expect(sendMailMock).toHaveBeenCalledTimes(1);
   });
 });

@@ -18,6 +18,12 @@ export default class SaveUserUseCase {
   ) {
     this._repository = repository;
     this._eventDispatcher = eventDispatcher;
+    const sendEmailWhenUserIsCreatedHandler =
+      new SendEmailWhenUserIsCreatedHandler();
+    this._eventDispatcher.register(
+      "UserCreatedEvent",
+      sendEmailWhenUserIsCreatedHandler
+    );
   }
 
   async execute(input: InputSaveUserUseCase): Promise<OutputSaveUserUseCase> {
@@ -28,12 +34,6 @@ export default class SaveUserUseCase {
       input.role
     );
     await user.hashPassword();
-    const sendEmailWhenUserIsCreatedHandler =
-      new SendEmailWhenUserIsCreatedHandler();
-    this._eventDispatcher.register(
-      "UserCreatedEvent",
-      sendEmailWhenUserIsCreatedHandler
-    );
     await this._repository.save(user);
     const userCreatedEvent = new UserCreatedEvent({
       userName: user.name,
