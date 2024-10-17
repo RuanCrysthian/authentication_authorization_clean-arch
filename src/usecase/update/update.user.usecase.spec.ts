@@ -40,8 +40,6 @@ describe("Update User Use Case Tests", () => {
     };
 
     const output = await useCase.execute(input);
-    console.log(output);
-    console.log(user);
 
     expect(output.id).toBe(input.id);
     expect(output.name).toBe(input.name);
