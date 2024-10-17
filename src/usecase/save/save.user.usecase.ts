@@ -18,12 +18,7 @@ export default class SaveUserUseCase {
   ) {
     this._repository = repository;
     this._eventDispatcher = eventDispatcher;
-    const sendEmailWhenUserIsCreatedHandler =
-      new SendEmailWhenUserIsCreatedHandler();
-    this._eventDispatcher.register(
-      "UserCreatedEvent",
-      sendEmailWhenUserIsCreatedHandler
-    );
+    this.registerSendEmailEvent();
   }
 
   async execute(input: InputSaveUserUseCase): Promise<OutputSaveUserUseCase> {
@@ -48,5 +43,14 @@ export default class SaveUserUseCase {
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };
+  }
+
+  private registerSendEmailEvent(): void {
+    const sendEmailWhenUserIsCreatedHandler =
+      new SendEmailWhenUserIsCreatedHandler();
+    this._eventDispatcher.register(
+      "UserCreatedEvent",
+      sendEmailWhenUserIsCreatedHandler
+    );
   }
 }
