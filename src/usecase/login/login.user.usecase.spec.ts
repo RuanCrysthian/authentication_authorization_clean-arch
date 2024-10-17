@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Sequelize } from "sequelize-typescript";
+import EventDispatcher from "../../domain/event/event.dispatcher";
 import UserModel from "../../infra/repository/sequelize/user.model";
 import UserRepository from "../../infra/repository/sequelize/user.repository.sequelize";
 import SaveUserUseCase from "../save/save.user.usecase";
@@ -32,7 +33,11 @@ describe("Test Login User UseCase", () => {
   it("should make login when email and password is correct and return token JWT", async () => {
     const userRepository = new UserRepository();
     const loginUseCase = new LoginUseCase(userRepository);
-    const saveUserUseCase = new SaveUserUseCase(userRepository);
+    const eventDispatcher = new EventDispatcher();
+    const saveUserUseCase = new SaveUserUseCase(
+      userRepository,
+      eventDispatcher
+    );
 
     const inputSaveUser = {
       name: "John Doe",
@@ -76,8 +81,12 @@ describe("Test Login User UseCase", () => {
 
   it("it should throw error when password is incorrect", async () => {
     const userRepository = new UserRepository();
+    const eventDispatcher = new EventDispatcher();
     const loginUseCase = new LoginUseCase(userRepository);
-    const saveUserUseCase = new SaveUserUseCase(userRepository);
+    const saveUserUseCase = new SaveUserUseCase(
+      userRepository,
+      eventDispatcher
+    );
 
     const inputSaveUser = {
       name: "John Doe",

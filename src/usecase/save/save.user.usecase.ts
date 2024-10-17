@@ -1,3 +1,6 @@
+import EventDispatcherInterface from "../../domain/event/event.dispatcher.interface";
+import SendEmailWhenUserIsCreatedHandler from "../../domain/event/handler/send.email.when.user.is.created.handler";
+import UserCreatedEvent from "../../domain/event/user.created.event";
 import UserFactory from "../../domain/factory/user.factory";
 import UserRepositoryInterface from "../../domain/repository/user.repository.interface";
 import {
@@ -7,9 +10,14 @@ import {
 
 export default class SaveUserUseCase {
   private _repository: UserRepositoryInterface;
+  private _eventDispatcher: EventDispatcherInterface;
 
-  constructor(repository: UserRepositoryInterface) {
+  constructor(
+    repository: UserRepositoryInterface,
+    eventDispatcher: EventDispatcherInterface
+  ) {
     this._repository = repository;
+    this._eventDispatcher = eventDispatcher;
   }
 
   async execute(input: InputSaveUserUseCase): Promise<OutputSaveUserUseCase> {
@@ -20,7 +28,18 @@ export default class SaveUserUseCase {
       input.role
     );
     await user.hashPassword();
+    const sendEmailWhenUserIsCreatedHandler =
+      new SendEmailWhenUserIsCreatedHandler();
+    this._eventDispatcher.register(
+      "UserCreatedEvent",
+      sendEmailWhenUserIsCreatedHandler
+    );
     await this._repository.save(user);
+    const userCreatedEvent = new UserCreatedEvent({
+      userName: user.name,
+      userEmail: user.email,
+    });
+    this._eventDispatcher.notify(userCreatedEvent);
     return {
       id: user.id,
       name: user.name,

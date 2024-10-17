@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize-typescript";
+import EventDispatcher from "../../domain/event/event.dispatcher";
 import UserModel from "../../infra/repository/sequelize/user.model";
 import UserRepository from "../../infra/repository/sequelize/user.repository.sequelize";
 import SaveUserUseCase from "./save.user.usecase";
@@ -24,7 +25,8 @@ describe("Save user use case test", () => {
 
   it("should create a new user", async () => {
     const userRepository = new UserRepository();
-    const usecase = new SaveUserUseCase(userRepository);
+    const eventDispatcher = new EventDispatcher();
+    const usecase = new SaveUserUseCase(userRepository, eventDispatcher);
     const input = {
       name: "John Doe",
       email: "test@email.com",
