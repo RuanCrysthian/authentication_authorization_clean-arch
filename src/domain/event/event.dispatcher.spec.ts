@@ -75,4 +75,27 @@ describe("Domain events tests", () => {
     expect(spyEventHandler).toHaveBeenCalled();
     expect(sendMailMock).toHaveBeenCalled(); // Certificar-se de que o e-mail foi "enviado"
   });
+
+  it("should handle errors when sending email", async () => {
+    const eventDispatcher = new EventDispatcher();
+    const eventHandler = new SendEmailWhenUserIsCreatedHandler();
+    const spyEventHandler = jest.spyOn(eventHandler, "handle");
+    eventDispatcher.register("UserCreatedEvent", eventHandler);
+    sendMailMock.mockRejectedValueOnce(new Error("Failed to send email"));
+    const userCreatedEvent = new UserCreatedEvent({
+      userName: "John Doe",
+      userEmail: "test@email.com",
+    });
+    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+
+    await eventDispatcher.notify(userCreatedEvent);
+
+    expect(spyEventHandler).toHaveBeenCalled();
+    expect(sendMailMock).toHaveBeenCalled();
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Error sending email:",
+      expect.any(Error)
+    );
+    consoleErrorSpy.mockRestore();
+  });
 });
