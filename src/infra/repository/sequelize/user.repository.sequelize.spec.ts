@@ -162,6 +162,19 @@ describe("User repository unit tests", () => {
     );
   });
 
+  it("should throw an error if the user is not found to update", async () => {
+    const userRepository = new UserRepository();
+    const user = UserFactory.create(
+      "John Doe",
+      "t@t.com",
+      "@QAZ123qaz",
+      "user"
+    );
+    expect(async () => {
+      await userRepository.update(user);
+    }).rejects.toThrow("User not found");
+  });
+
   it("should delete an user", async () => {
     const userRepository = new UserRepository();
     const user = UserFactory.create(
