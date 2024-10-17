@@ -175,6 +175,30 @@ describe("User repository unit tests", () => {
     }).rejects.toThrow("User not found");
   });
 
+  it("should throw an error if email already exists when updating", async () => {
+    const userRepository = new UserRepository();
+    const user = UserFactory.create(
+      "John Doe",
+      "test@email.com",
+      "@QAZ123qaz",
+      "user"
+    );
+    await userRepository.save(user);
+
+    const duplicateUser = UserFactory.create(
+      "Jane Doe",
+      "test1@email.com",
+      "@QAZ123qaz",
+      "user"
+    );
+    await userRepository.save(duplicateUser);
+
+    duplicateUser.changeEmail(user.email);
+    await expect(userRepository.update(duplicateUser)).rejects.toThrow(
+      "Email already exists"
+    );
+  });
+
   it("should delete an user", async () => {
     const userRepository = new UserRepository();
     const user = UserFactory.create(
@@ -191,5 +215,12 @@ describe("User repository unit tests", () => {
       where: { id: user.id },
     });
     expect(userDeleted).toBeNull();
+  });
+
+  it("should throw an error if the user is not found to delete", async () => {
+    const userRepository = new UserRepository();
+    expect(async () => {
+      await userRepository.delete("1");
+    }).rejects.toThrow("User not found");
   });
 });
