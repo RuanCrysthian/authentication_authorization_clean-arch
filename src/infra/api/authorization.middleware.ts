@@ -9,7 +9,7 @@ declare module "express" {
   }
 }
 
-export function authorazationMiddleware(requiredRoles: string[]) {
+export function authorizationMiddleware(requiredRoles: string[]) {
   return (req: Request, res: Response, next: NextFunction): void => {
     const userRole = req.user?.role;
     if (!userRole || !requiredRoles.includes(userRole)) {

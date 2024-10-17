@@ -1,13 +1,13 @@
 import express, { Request, Response } from "express";
 import { authMiddleware } from "../authentication.middleware";
-import { authorazationMiddleware } from "../authorazation.middleware";
+import { authorizationMiddleware } from "../authorization.middleware";
 
 export const testRoute = express.Router();
 
 testRoute.get(
   "/admin",
   authMiddleware,
-  authorazationMiddleware(["admin"]),
+  authorizationMiddleware(["admin"]),
   async (req: Request, res: Response) => {
     res.json({ message: "Welcome, admin!" });
   }
@@ -16,7 +16,7 @@ testRoute.get(
 testRoute.get(
   "/user",
   authMiddleware,
-  authorazationMiddleware(["user"]),
+  authorizationMiddleware(["user"]),
   async (req: Request, res: Response) => {
     res.json({ message: "Welcome, user!" });
   }
@@ -25,7 +25,7 @@ testRoute.get(
 testRoute.get(
   "/all",
   authMiddleware,
-  authorazationMiddleware(["admin", "user"]),
+  authorizationMiddleware(["admin", "user"]),
   async (req: Request, res: Response) => {
     res.json({ message: "Welcome, all!" });
   }
